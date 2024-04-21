@@ -5,5 +5,8 @@ import path from "../assets/images/path.png";
 import logo from "../assets/images/logo.png";
 import logoSmall from "../assets/images/logo-small.png";
 import empty from "../assets/images/empty.png";
+import tick from "../assets/images/tick.gif";
+import cross from "../assets/images/cross.gif";
+import question from "../assets/images/question.gif";
 
-export default { profile, thumbnail, cards, path, logo, logoSmall, empty };
+export default { profile, thumbnail, cards, path, logo, logoSmall, empty, tick, cross, question };

@@ -1,5 +1,5 @@
 import { FlatList, Image, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { icons, images } from '../../constants'
 import EmptyState from '../../components/EmptyState'
@@ -9,16 +9,18 @@ import PostCard from '../../components/PostCard'
 import { useGlobalContext } from '../../context/GlobalProvider'
 import InfoBox from '../../components/InfoBox'
 import { router } from 'expo-router'
+import CustomModal from '../../components/CustomModal'
 
 const Profile = () => {
     const { user, setUser, setIsLoggedIn } = useGlobalContext();
     const { data: posts, refetch } = useAppwrite(() => getUserPosts(user.$id));
 
-    const logout = async () => {
+    const [isModalOpen, setIsModalOpen] = useState(false)
+
+    const handleLogOut = async () => {
         await signOut();
         setUser(null);
         setIsLoggedIn(false);
-
         router.replace("/sign-in");
     };
 
@@ -36,7 +38,7 @@ const Profile = () => {
                 ListHeaderComponent={() => (
                     <View className="w-full flex justify-center items-center mt-6 mb-12 px-4">
                         <TouchableOpacity
-                            onPress={logout}
+                            onPress={() => setIsModalOpen(true)}
                             className="flex w-full items-end mb-10"
                         >
                             <Image
@@ -46,7 +48,7 @@ const Profile = () => {
                             />
                         </TouchableOpacity>
 
-                        <View className="w-16 h-16 border border-secondary rounded-lg flex justify-center items-center">
+                        <View className="w-16 h-16 rounded-lg flex justify-center items-center">
                             <Image
                                 source={{ uri: user?.avatar }}
                                 className="w-[90%] h-[90%] rounded-lg"
@@ -82,6 +84,15 @@ const Profile = () => {
                     />
                 )}
             />
+            {isModalOpen && (
+                <CustomModal
+                    isOpen={isModalOpen}
+                    modalImage={images.question}
+                    modalMessage="Are you sure you want to log out?"
+                    setIsModalOpen={setIsModalOpen}
+                    onPressOK={handleLogOut}
+                />
+            )}
         </SafeAreaView>
     )
 }

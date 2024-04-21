@@ -15,9 +15,11 @@ const SignIn = () => {
         password: '',
     })
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isNotValid, setIsNotValid] = useState(false);
     const router = useRouter();
 
     const submit = async () => {
+        setIsNotValid(false);
         if (!form.email || !form.password)
             Alert.alert("Error", 'Please fill in all the fields');
 
@@ -33,6 +35,7 @@ const SignIn = () => {
 
             router.replace('/home');
         } catch (error) {
+            setIsNotValid(true);
             console.log("SIGNIN_ERROR", error);
         } finally {
             setIsSubmitting(false);
@@ -52,6 +55,12 @@ const SignIn = () => {
                     <Text className="text-2xl text-white text-semibold mt-10 font-semibold">
                         Welcome! Sign In
                     </Text>
+
+                    {isNotValid && (
+                        <Text className="text-base text-red-500 text-semibold mt-7 font-semibold">
+                            ⚠️ The email or password entered is incorrect !
+                        </Text>
+                    )}
 
                     <FormField
                         title="Email"
